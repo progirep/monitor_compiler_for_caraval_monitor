@@ -1,0 +1,14 @@
+STATES a b c
+INIT 0 1 0
+PROPOSITIONS x y z
+LET u | x a
+LET v | y b
+NEWBLOCK
+LET a' u
+LET b' | v a
+
+
+
+LET c' & u v
+
+
