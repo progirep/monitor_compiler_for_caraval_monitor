@@ -76,6 +76,7 @@ for step in range(0,10):
 
     # Enrich current state by atomic propositions
     nextPropositionValues = int(random.random()*(1 << len(propositions)))
+        
     for i,p in enumerate(propositions):
         if (nextPropositionValues & (1 << i))>0:
             currentState[p] = True
@@ -121,10 +122,11 @@ for step in range(0,10):
     for i,p in enumerate(stateBits):
         if currentState[p]:
             nextState = nextState | (1 << i)
-            currentState[p] = False
+    
+    # print("// Values of all bits after APs: "+str(currentState))
             
     # Check only the first 60 state bits -- the other ones may be "tainted" by values from the final spurious table lookup 
                 
     print("if (*((volatile uint32_t*)(0x30020008))!="+hex(nextState & ((1 << 32)-1))+") failTest();")
-    print("if (((*((volatile uint32_t*)(0x3002000B))) & "+hex((1<<60)-1)+")!="+hex((nextState >> 32) & ((1<<60)-1))+") failTest();")
+    print("if (((*((volatile uint32_t*)(0x3002000C))) & "+hex((1<<28)-1)+")!="+hex((nextState >> 32) & ((1<<28)-1))+") failTest();")
     
