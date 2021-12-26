@@ -310,6 +310,10 @@ for i in range(0,len(controlInformationAtEnd),2):
         print("\n\t")
 print("};")
 
+# Doesn't fit?
+if len(controlInformationAtEnd)*2+len(lookupBlockMaskGather)*16>1024:
+    raise Exception("Error: Number of blocks in monitor is too large -- the data for the control information SRAM is too large.")
+
 # resetMonitor Code
 print("void resetMonitor() {")
 initialEncoded = 0
@@ -337,11 +341,11 @@ print("\tfor (unsigned int i=0;i<"+str(4*(len(blockLetStatements)+1))+";i++) {")
 print("\t\t*((volatile uint32_t*)(0x30000000+4*i)) = monitoringMaskTable[i];")
 print("\t}")
 print("\t// Fill control information part")
-print("\tfor (unsigned int i=0;i<"+str(len(blockLetStatements)//2)+";i++) {")
+print("\tfor (unsigned int i=0;i<"+str(len(controlInformationAtEnd)//2)+";i++) {")
 print("\t\t*((volatile uint32_t*)(0x30000000+1024-4-4*i)) = monitoringControlInfo[i];")
 print("\t}")
 print("\t// Set control register")
-print("\t*((volatile uint32_t*)(0x30020000)) = "+str(len(blockLetStatements)+1)+" /* Nof Blocks */ + ("+str(len(blockLetStatements)+1)+" << 6) /*Current block*/;") 
+print("\t*((volatile uint32_t*)(0x30020000)) = "+str(len(blockLetStatements))+" /*Nof last block*/ + (0 << 6) /*current block*/;") 
 print("\t// Trigger cycle to fill buffers")
 print("\t*((volatile uint32_t*)(0x30020004)) = 0;")
 print("\tresetMonitor();")

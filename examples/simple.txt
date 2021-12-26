@@ -3,13 +3,10 @@ INITIAL 0 1 0
 PROPOSITIONS x y z x2 y2 z2
 LET tmp | x a
 LET u tmp
-LET v | y b
+LET v ^ y b
 NEWBLOCK
 LET a' u
-LET b' | v a
-
-
-
+LET b' ^ v a
 LET c' & u v
 
 
