@@ -233,8 +233,8 @@ for lutSize in [16,8,4]:
             elif lutSize==4:
                 for i in range(0,len(lookupBlocks[blockNum]),2):
                     bytesLookupTables.append(lookupBlocks[blockNum][i]+16*lookupBlocks[blockNum][i+1])
-if len(bytesLookupTables)>8192:
-    raise Exception("Error: Not enough space in the lookup table space of 8 kB")
+if len(bytesLookupTables)>2048:
+    raise Exception("Error: Not enough space in the lookup table space of 2 kB")
 while (len(bytesLookupTables)%4)!=0:
     bytesLookupTables.append(0)
             
