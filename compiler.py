@@ -197,7 +197,7 @@ for block in range(len(blockLetStatements)):
                     return res1 ^ res2,posC
                 elif a[pos]=="!":
                     res1,posB = recurseParse(pos+1)
-                    return not res, posB
+                    return not res1, posB
                 else:
                     return thisAssignment[a[pos]], pos+1                
             result,pos = recurseParse(1)
@@ -234,10 +234,10 @@ for lutSize in [16,8,4]:
                 for i in range(0,len(lookupBlocks[blockNum]),2):
                     bytesLookupTables.append(lookupBlocks[blockNum][i]+16*lookupBlocks[blockNum][i+1])
 if len(bytesLookupTables)>8192:
-    raise Exception("Error: Not enough space in the lookup table space of 8 kB")
+    raise Exception("Error: Not enough space in the lookup table space of 8 kB - Number of bytes is "+str(len(bytesLookupTables)))
 while (len(bytesLookupTables)%4)!=0:
     bytesLookupTables.append(0)
-            
+print("# Bytes used for lookup tables:",len(bytesLookupTables))            
     
 # Prepare the mask for the final block
 lastMask = 0
@@ -263,7 +263,7 @@ for i in range(0,len(bytesLookupTables),4):
     print("0x"+bytesLookupTables[i+3]+bytesLookupTables[i+2]+bytesLookupTables[i+1]+bytesLookupTables[i+0],end="")
     if i!=len(bytesLookupTables)-4:
         print(",",end="")
-    if (i%4==3):
+    if (i%16==12):
         print("\n\t",end="")
 print("};")
 print("const uint32_t monitoringMaskTable[] = {",end="")
@@ -292,6 +292,8 @@ for i in range(len(blockLetStatements)):
         raise Exception("Internal error.")
     controlInformationAtEnd.append((lenInfo << 14) + addressInfo)
     assert addressInfo < 1<<14
+
+print("// Starting addresses (in bytes) of the lookup tables: "+str(startingPositionsLookupTables))
     
 # Add final control information for the update block
 controlInformationAtEnd.append((1<<15)+(1<<14))
@@ -307,7 +309,7 @@ for i in range(0,len(controlInformationAtEnd),2):
     if i+2!=len(controlInformationAtEnd):
         print(",",end="")
     if (i % 8)==6:
-        print("\n\t")
+        print("\n\t",end="")
 print("};")
 
 # Doesn't fit?
@@ -330,6 +332,7 @@ print("\t*((volatile uint32_t*)(0x3002000C)) = "+hex(initialEncoded >> 32)+";")
 print("}\n")
 
 
+
 # initMonitorCode
 print("void initMonitor() {")
 print("\t// Fill lookup table memory")
@@ -345,7 +348,7 @@ print("\tfor (unsigned int i=0;i<"+str(len(controlInformationAtEnd)//2)+";i++) {
 print("\t\t*((volatile uint32_t*)(0x30000000+1024-4-4*i)) = monitoringControlInfo[i];")
 print("\t}")
 print("\t// Set control register")
-print("\t*((volatile uint32_t*)(0x30020000)) = "+str(len(blockLetStatements))+" /*Nof last block*/ + (0 << 6) /*current block*/;") 
+print("\t*((volatile uint32_t*)(0x30020000)) = "+str(len(blockLetStatements))+" /*Nof last block*/ + (0 << 6) /*current block*/ + ("+str(nofReservedBitsInput//4-1)+"<<18) /* Nof Nibbles of propositions minus 1 */;") 
 print("\t// Trigger cycle to fill buffers")
 print("\t*((volatile uint32_t*)(0x30020004)) = 0;")
 print("\tresetMonitor();")

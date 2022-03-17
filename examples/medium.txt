@@ -1,0 +1,48 @@
+STATES s0 s1 s2 s3 s4 s5 s6 s7 s8 s9 s10
+INITIAL 0 1 0 1 1 0 0 1 0 0 1
+PROPOSITIONS p0 p1 p2 p3 p4 p5 p6
+LET v0 ! ^ | s3 s2 p5
+LET v1 ^ p6 s0
+LET v2 p4
+LET v3 | ! & s9 s2 ! ! p0
+LET v4 s7
+LET v5 p5
+LET s0' p4
+LET s1' s2
+NEWBLOCK
+LET v6 & p2 & | v3 v1 ^ p5 s0
+LET v7 v5
+LET v8 | s1 ^ ! p4 ! s6
+LET v9 | | ! s1 & p2 v5 ^ s1 ^ s1 s6
+LET v10 | s6 & p5 s1
+NEWBLOCK
+LET v11 ! ! | s5 s9
+LET v12 p2
+LET v13 | p4 ! s6
+LET v14 v10
+LET v15 s7
+LET v16 ! s7
+LET s2' v10
+LET s3' p3
+NEWBLOCK
+LET v17 ^ ^ ^ v16 s5 | p1 s9 v14
+LET v18 & & ^ p6 v12 s9 ^ v15 | s6 v15
+LET v19 & v16 ! & p1 p6
+LET v20 s5
+LET v21 p6
+LET s4' ! ^ ! v15 ^ v12 v16
+LET s5' p1
+LET s6' & ! s6 ^ s9 | s6 s6
+NEWBLOCK
+LET v22 & | ! p4 | v3 v2 ! | p1 p4
+LET v23 v7
+LET v24 ! | v13 ^ v20 v1
+LET v25 ^ & ! p1 & p6 p4 ! ! v7
+LET s7' & p6 ^ ! p4 v2
+LET s8' | | ! v3 ! v2 ^ ^ v7 p1 v20
+NEWBLOCK
+LET v26 ! v14
+LET v27 v7
+LET v28 & ^ v0 ^ s2 v17 ^ ! s0 s0
+LET s9' ! & ! v1 v15
+LET s10' ^ v24 ^ v17 | v24 v7

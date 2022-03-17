@@ -104,7 +104,7 @@ for step in range(0,10):
                     return res1 ^ res2,posC
                 elif a[pos]=="!":
                     res1,posB = recurseParse(pos+1)
-                    return not res, posB
+                    return not res1, posB
                 else:
                     return currentState[a[pos]], pos+1                
             result,pos = recurseParse(1)
